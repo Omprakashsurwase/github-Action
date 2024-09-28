@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: https://github.com/Omprakashsurwase/github-Action.git
+        uses: actions/checkout@v3  # Correct usage of the checkout action
 
       - name: Build Docker image
         run: |
