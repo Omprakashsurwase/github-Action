@@ -41,7 +41,7 @@ jobs:
 
       - name: Run Docker container
         run: |
-          docker run --name my-container my-docker-image
+          docker run my-docker-image
 
       - name: Check output
         run: |
