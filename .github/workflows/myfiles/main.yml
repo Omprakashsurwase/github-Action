@@ -35,3 +35,42 @@ jobs:
       - name: List public S3 bucket contents
         run: |
           aws s3 ls s3://public-bucket/
+
+
+name: Helm and Docker Deployment to S3
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Helm
+        run: |
+          curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+          chmod 700 get_helm.sh
+          ./get_helm.sh
+
+      - name: Create Dockerfile
+        run: |
+          echo "FROM ubuntu:latest" > Dockerfile
+          echo "WORKDIR /app" >> Dockerfile
+          echo "COPY . /app" >> Dockerfile
+          echo "RUN apt-get update && apt-get install -y curl" >> Dockerfile
+          echo "EXPOSE 80" >> Dockerfile
+          echo "ENV NAME World" >> Dockerfile
+          echo "CMD [\"echo\", \"Hello \$NAME\"]" >> Dockerfile
+
+      - name: Build Docker image
+        run: |
+          docker build -t testimage .
+
+      - name: List public S3 bucket contents
+        run: |
+          aws s3 ls s3://public-bucket/
