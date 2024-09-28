@@ -14,7 +14,19 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3  # Correct usage of the checkout action
+        uses: actions/checkout@v3
+
+      - name: Create app.js
+        run: |
+          echo 'console.log("Hello, World! This is my application running inside a Docker container.");' > app.js
+
+      - name: Create Dockerfile
+        run: |
+          echo 'FROM centos:7' > Dockerfile
+          echo 'WORKDIR /app' >> Dockerfile
+          echo 'COPY app.js .' >> Dockerfile
+          echo 'RUN yum -y update && yum install -y epel-release && yum install -y nodejs tree vi && yum clean all' >> Dockerfile
+          echo 'CMD ["node", "app.js"]' >> Dockerfile
 
       - name: Build Docker image
         run: |
