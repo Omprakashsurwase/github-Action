@@ -10,3 +10,16 @@ jobs:
         uses: actions/checkout@v2
       - name: Print message
         run: echo "Hello World"
+
+name: Install All Packages
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install packages
+        run: npm install
