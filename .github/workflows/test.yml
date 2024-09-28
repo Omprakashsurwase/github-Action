@@ -35,6 +35,10 @@ jobs:
         run: |
           docker ps 
 
+      - name: List Docker images
+        run: |
+          docker images  # List all Docker i
+
       - name: Run Docker container
         run: |
           docker run --name my-container my-docker-image
