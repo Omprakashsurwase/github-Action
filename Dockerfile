@@ -1,20 +1,18 @@
-# Use the official Node.js image as a base
-FROM node:14
+# Use a base image that supports yum
+FROM centos:7
 
-# Set the working directory inside the container
+# Set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json
-COPY package*.json ./
+# Copy your application code into the container
+COPY app.js .  # Ensure this matches your file's name
+COPY app.sh .   # Copy your script if necessary
 
-# Install the application dependencies
-RUN npm install
+# Update the repository and install required packages
+RUN yum -y update && \
+    yum install -y epel-release && \
+    yum install -y nodejs tree vi && \
+    yum clean all
 
-# Copy the rest of the application code
-COPY . .
-
-# Expose the application port
-EXPOSE 3000
-
-# Command to run the application
-CMD ["node", "app.js"]
+# Define the command to run your application
+CMD ["node", "app.js"]  # Update this to the correct entry point
