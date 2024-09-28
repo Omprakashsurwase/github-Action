@@ -1,25 +1,48 @@
-name: 'build-test'
-on: # rebuild any PRs and main branch changes
-  workflow_dispatch:
-  pull_request:
-    branches:
-      - main
+name: CI Workflow
+
+on:
   push:
     branches:
       - main
-      - 'releases/*'
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build: # make sure build/ci work properly
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - run: |
-          npm install
-      - run: |
-          npm run build
-      - run: |
-          npm run test
+      - name: Checkout code
+        uses: actions/checkout@v2
 
+      - name: Create Dockerfile
+        run: |
+          echo 'FROM centos:7' > Dockerfile
+          echo 'WORKDIR /app' >> Dockerfile
+          echo 'COPY app.sh .' >> Dockerfile
+          echo 'RUN yum install -y tree vi && yum clean all' >> Dockerfile
+          echo 'CMD ["./app.sh"]' >> Dockerfile
 
-          
+      - name: Create app.sh
+        run: |
+          echo '#!/bin/bash' > app.sh
+          echo 'echo "Hello, World! This is my application running inside a Docker container."' >> app.sh
+          chmod +x app.sh
+
+      - name: Build Docker image
+        run: |
+          docker build -t my-docker-image .
+
+      - name: Run Docker container
+        run: |
+          docker run --name my-container my-docker-image
+
+      - name: Check output
+        run: |
+          docker logs my-container
+
+      - name: Cleanup
+        run: |
+          docker stop my-container
+          docker rm my-container
