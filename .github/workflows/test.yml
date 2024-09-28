@@ -39,9 +39,19 @@ jobs:
         run: |
           docker images  # List all Docker i
 
+      - name: Build Docker image
+        run: |
+          docker build -t my-docker-image .
+
+      - name: Run Docker container
+        run: |
+          docker run --name my-container -d my-docker-image  # Run in detached mode
+     
       - name: Run Docker container
         run: |
           docker run --name my-container -d my-docker-image
+          docker exec my-container node -v  # Check Node.js version
+
       - name: Check output
         run: |
           docker logs my-container
