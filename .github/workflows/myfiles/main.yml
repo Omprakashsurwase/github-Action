@@ -18,6 +18,16 @@ jobs:
           chmod 700 get_helm.sh
           ./get_helm.sh
 
+      - name: Create Dockerfile
+        run: |
+          echo "FROM ubuntu:latest" > Dockerfile
+          echo "WORKDIR /app" >> Dockerfile
+          echo "COPY . /app" >> Dockerfile
+          echo "RUN apt-get update && apt-get install -y curl" >> Dockerfile
+          echo "EXPOSE 80" >> Dockerfile
+          echo "ENV NAME World" >> Dockerfile
+          echo "CMD [\"echo\", \"Hello \$NAME\"]" >> Dockerfile
+
       - name: Build Docker image
         run: |
           docker build -t testimage .
