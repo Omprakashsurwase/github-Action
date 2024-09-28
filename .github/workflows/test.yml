@@ -14,21 +14,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Create Dockerfile
-        run: |
-          echo 'FROM centos:7' > Dockerfile
-          echo 'WORKDIR /app' >> Dockerfile
-          echo 'COPY app.sh .' >> Dockerfile
-          echo 'CMD ["./app.sh"]' >> Dockerfile
-
-
-      - name: Create app.sh
-        run: |
-          echo '#!/bin/bash' > app.sh
-          echo 'echo "Hello, World! This is my application running inside a Docker container."' >> app.sh
-          chmod +x app.sh
+        uses: https://github.com/Omprakashsurwase/github-Action.git
 
       - name: Build Docker image
         run: |
