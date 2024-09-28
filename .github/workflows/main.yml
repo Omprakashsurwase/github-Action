@@ -18,28 +18,10 @@ jobs:
           chmod 700 get_helm.sh
           ./get_helm.sh
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v1
-        with:
-          username: testuser
-          password: testpassword
-
-      - name: Build and push Docker image
+      - name: Build Docker image
         run: |
           docker build -t testimage .
-          docker tag testimage testuser/testimage:latest
-          docker push testuser/testimage:latest
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: AKIAIOSFODNN7EXAMPLE
-          aws-secret-access-key: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
-
-      - name: List S3 bucket contents
+      - name: List public S3 bucket contents
         run: |
-          aws s3 ls s3://testbucket/
-
-      - name: Upload to S3
-        run: |
-          aws s3 cp testimage.tar.gz s3://testbucket/testimage.tar.gz
+          aws s3 ls s3://public-bucket/
